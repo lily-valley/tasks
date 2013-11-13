@@ -49,9 +49,11 @@
             printf("Can't open FIFO\n");
             exit(-1);
         }
+    //лучше использовать define - перепешите
         const int tot = 256;
         char  *rcvd, *rcurr,*rbuf;
         int cha = sizeof(char);
+    // почему в итоге вы аллоцируете 256 + 1?
         rcvd = rcurr = malloc(tot+cha);
         int full = tot;
         int i = read(fd,rcvd,full);
@@ -86,6 +88,7 @@
             printf("Can't create shared memory segment\n");
             exit(-1);
         }
+    // что делает эта функция?
         char *att = shmat(mem,NULL,0);
         if (att < 0){
             printf("Can't attach shared memory\n");
