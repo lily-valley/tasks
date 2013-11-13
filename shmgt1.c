@@ -11,6 +11,7 @@
 
 #define P_ID 3
 #define SH_FILE "shmgt.txt"
+#define NBYTES 256
     int main(int argc,char** argv,char* envp[]){
     int result;
     char name[]="shmgt.fifo";
@@ -49,11 +50,12 @@
             printf("Can't open FIFO\n");
             exit(-1);
         }
-    //лучше использовать define - перепешите
-        const int tot = 256;
+    //лучше использовать define - перепешите - переписано
+        const int tot = NBYTES;
         char  *rcvd, *rcurr,*rbuf;
         int cha = sizeof(char);
-    // почему в итоге вы аллоцируете 256 + 1?
+    // почему в итоге вы аллоцируете 256 + 1? - потому что, когда мы считываем данные из FIFO и определяем размер в charaх, там не 
+    //обязательно будет "\0" в конце, а функции shmget он необходим, поэтому мы выделяем на него лишний байт, и сами его ставим.
         rcvd = rcurr = malloc(tot+cha);
         int full = tot;
         int i = read(fd,rcvd,full);
@@ -88,7 +90,7 @@
             printf("Can't create shared memory segment\n");
             exit(-1);
         }
-    // что делает эта функция?
+    // что делает эта функция? - это не функция, а указатель типа char. В него возвращается значение команды, которая прикрепляет разделяемую память к адресному пространству процесса
         char *att = shmat(mem,NULL,0);
         if (att < 0){
             printf("Can't attach shared memory\n");
