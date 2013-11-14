@@ -66,7 +66,9 @@ int main(int argc, char** argv, char* envp[]){
              arr_tmp[j - tmp] = 0;
              tmp = i;
              char *end;
+             // вы же уже посчитали в strings общее количесвто строчек - зачем все время реаллоцировать? 
              delay = (int*)realloc(delay, (count + 1)*sizeof(int));
+//сделайте так , чтобы одно неправильное значение не завершало всю программу - выводилась ошибка, а оправильные команды бы выполнялись
              if ((delay[count] = strtol(arr_tmp, &end, 10)) == 0){
                  if (errno == EINVAL){
                      printf("Invalid number %d: check the input\n", count + 1);
